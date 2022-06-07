@@ -1,5 +1,6 @@
 #include <string.h>
 #include "parse.h"
+#include "run.h"
 
 void print_job_list(job*);
 
@@ -13,7 +14,7 @@ int main(int argc, char *argv[]) {
 
         curr_job = parse_line(s);
 
-        print_job_list(curr_job);
+        run_job(curr_job);
 
         free_job(curr_job);
     }
