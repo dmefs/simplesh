@@ -18,8 +18,8 @@ typedef struct process_ {
     char*        input_redirection;
 
     write_option output_option;
+    int          pipe_fd[2];
     char*        output_redirection;
-
     struct process_* next;
 } process;
 

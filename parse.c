@@ -88,6 +88,7 @@ static process* initialize_process() {
     p->output_option = TRUNC;
     p->output_redirection = NULL;
     p->next = NULL;
+    p->pipe_fd[0] = p->pipe_fd[1] = -1;
 
     return p;
 }
