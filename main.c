@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
 
         curr_job = parse_line(s);
 
-        run_job(curr_job);
+        run_jobs(curr_job);
 
         free_job(curr_job);
     }
