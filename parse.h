@@ -1,6 +1,10 @@
 #ifndef __PARSE_H__
 #define __PARSE_H__
 
+#include <sys/types.h>
+#include <unistd.h>
+#include <termios.h>
+
 #define PROMPT "ish$ " /* 入力ライン冒頭の文字列 */
 #define NAMELEN 32    /* 各種名前の長さ */
 #define ARGLSTLEN 16  /* 1つのプロセスがとる実行時引数の数 */
@@ -18,9 +22,14 @@ typedef struct process_ {
     char*        input_redirection;
 
     write_option output_option;
-    int          pipe_fd[2];
     char*        output_redirection;
     struct process_* next;
+    int          pipe_fd[2];
+    int          pipe_operation[2];
+    int          status;
+    pid_t        pid;
+    char         completed;
+    char         stopped;
 } process;
 
 typedef enum job_mode_ {
@@ -32,6 +41,10 @@ typedef struct job_ {
     job_mode     mode;
     process*     process_list;
     struct job_* next;
+    char*        command;
+    pid_t        pgid;
+    char         notified;
+    struct termios tmodes;
 } job;
 
 typedef enum parse_state_ {

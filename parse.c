@@ -93,6 +93,15 @@ static process* initialize_process() {
     return p;
 }
 
+static char* initialize_job_command(job *j) {
+
+    if(!(j->command = (char*)malloc(sizeof(char)*NAMELEN)))
+        return NULL;
+
+    memset(j->command, 0, NAMELEN);
+
+    return j->command;
+}
 static job* initialize_job() {
 
     job *j;
@@ -103,7 +112,8 @@ static job* initialize_job() {
     j->mode = FOREGROUND;
     j->process_list = initialize_process();
     j->next = NULL;
-
+    initialize_job_command(j);
+    j->pgid = 0;
     return j;
 }
 
@@ -131,17 +141,15 @@ void free_job(job *j) {
 
     if(!j) return;
 
-    free_job(j->next);
-
     free_process(j->process_list);
-
+    free(j->command);
     free(j);
 }
 
 /* parser */
 /* 受け付けた文字列を解析して結果をjob構造体に入れる関数 */
 job* parse_line(char *buf) {
-
+    char *command = buf;
     job *curr_job = NULL;
     process *curr_prc = NULL;
     parse_state state = ARGUMENT;
@@ -226,5 +234,7 @@ job* parse_line(char *buf) {
     if(curr_prc)
         strcpy(curr_prc->program_name, curr_prc->argument_list[0]);
 
+    if (curr_job)
+        strcpy(curr_job->command, command);
     return curr_job;
 }
