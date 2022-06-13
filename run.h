@@ -5,4 +5,3 @@ extern char **environ;
 
 void run_job(job *j);
 void run_jobs(job *j);
-void add_job(job* j);
